@@ -1,0 +1,8 @@
+
+*.ipch
+*.db
+QInt/.vs/QInt/v16/.suo
+*.vcxproj
+*.filters
+*.user
+*.sln
