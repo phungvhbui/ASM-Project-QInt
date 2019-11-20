@@ -88,7 +88,7 @@ QInt QInt::operator/(const QInt& Qint2)
 //Bitwise
 QInt QInt::operator&(const QInt& Qint2)
 {
-	string result = QInt(2, "0").bit.to_string();
+	string result = QInt().bit.to_string();
 	string value1 = this->bit.to_string();
 	string value2 = Qint2.bit.to_string();
 
@@ -104,7 +104,7 @@ QInt QInt::operator&(const QInt& Qint2)
 
 QInt QInt::operator|(const QInt& Qint2)
 {
-	string result = QInt(2, "0").bit.to_string();
+	string result = QInt().bit.to_string();
 	string value1 = this->bit.to_string();
 	string value2 = Qint2.bit.to_string();
 
@@ -120,7 +120,7 @@ QInt QInt::operator|(const QInt& Qint2)
 
 QInt QInt::operator^(const QInt& Qint2)
 {
-	string result = QInt(2, "0").bit.to_string();
+	string result = QInt().bit.to_string();
 	string value1 = this->bit.to_string();
 	string value2 = Qint2.bit.to_string();
 
