@@ -2,7 +2,7 @@
 
 QInt::QInt()
 {
-	this->bit = binary(0);
+	this->bit = QInt(2, "0").bit;
 }
 
 QInt::QInt(const QInt& num)
@@ -140,9 +140,9 @@ QInt QInt::operator~()
 
 	for (int i = 0; i < value.size(); i++) {
 		if (value[i] == '0')
-			value[i] == '1';
+			value[i] = '1';
 		else if (value[i] == '1')
-			value[i] == '0';
+			value[i] = '0';
 	}
 
 	return QInt(2, value);
