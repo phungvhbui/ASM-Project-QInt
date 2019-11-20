@@ -56,8 +56,69 @@ string QInt::HexToBin(string hex)
 	return string();
 }
 
+//Arithmetic
 QInt QInt::operator=(QInt const& Qint)
 {
 	this->bit = Qint.bit;
 	return (*this);
 }
+
+QInt QInt::operator+(const QInt& Qint2)
+{
+	return QInt();
+}
+
+QInt QInt::operator-(const QInt& Qint2)
+{
+	return QInt();
+}
+
+QInt QInt::operator*(const QInt& Qint2)
+{
+	
+	return QInt();
+}
+
+QInt QInt::operator/(const QInt& Qint2)
+{
+	return QInt();
+}
+
+
+//Bitwise
+QInt QInt::operator&(const QInt& Qint2)
+{
+	QInt result;
+	result.bit = this->bit &= Qint2.bit;
+	return result;
+}
+
+QInt QInt::operator|(const QInt& Qint2)
+{
+	QInt result;
+	result.bit = this->bit |= Qint2.bit;
+	return result;
+}
+
+QInt QInt::operator^(const QInt& Qint2)
+{
+	QInt result;
+	result.bit = this->bit |= Qint2.bit;
+	return result;
+}
+
+QInt QInt::operator~()
+{
+	return QInt();
+}
+
+QInt QInt::operator>>(int step)
+{
+	return QInt();
+}
+
+QInt QInt::operator<<(int step)
+{
+	return QInt();
+}
+

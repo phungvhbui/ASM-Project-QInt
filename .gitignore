@@ -6,3 +6,12 @@ QInt/.vs/QInt/v16/.suo
 *.filters
 *.user
 *.sln
+*.tlog
+*.obj
+QInt/Project/.vs/Project/v16/.suo
+*.opendb
+*.exe
+*.ilk
+*.log
+*.pdb
+*.idb

@@ -2,5 +2,5 @@
 
 int main() {
 	QInt num;
-	num.
+	cout << sizeof(num);
 }
