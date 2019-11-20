@@ -88,79 +88,64 @@ QInt QInt::operator/(const QInt& Qint2)
 //Bitwise
 QInt QInt::operator&(const QInt& Qint2)
 {
-	QInt result;
-	string result_string = result.bit.to_string();
-
+	string result = QInt(2, "0").bit.to_string();
 	string value1 = this->bit.to_string();
 	string value2 = Qint2.bit.to_string();
 
 	for (int i = 0; i < value1.size(); i++) {
-		if (value1[i] == 1 && value2[i] == 1)
-			result_string[i] = 1;
+		if (value1[i] == '1' && value2[i] == '1')
+			result[i] = '1';
 		else
-			result_string[i] = 0;
+			result[i] = '0';
 	}
 
-	result.bit = binary(result_string);
-
-	return result;
+	return QInt(2, result);
 }
 
 QInt QInt::operator|(const QInt& Qint2)
 {
-	QInt result;
-	string result_string = result.bit.to_string();
-
+	string result = QInt(2, "0").bit.to_string();
 	string value1 = this->bit.to_string();
 	string value2 = Qint2.bit.to_string();
 
 	for (int i = 0; i < value1.size(); i++) {
-		if (value1[i] == 0 && value2[i] == 0)
-			result_string[i] = 0;
+		if (value1[i] == '0' && value2[i] == '0')
+			result[i] = '0';
 		else
-			result_string[i] = 1;
+			result[i] = '1';
 	}
 
-	result.bit = binary(result_string);
-
-	return result;
+	return QInt(2, result);
 }
 
 QInt QInt::operator^(const QInt& Qint2)
 {
-	QInt result;
-	string result_string = result.bit.to_string();
-
+	string result = QInt(2, "0").bit.to_string();
 	string value1 = this->bit.to_string();
 	string value2 = Qint2.bit.to_string();
 
 	for (int i = 0; i < value1.size(); i++) {
 		if (value1[i] == value2[i])
-			result_string[i] = 0;
+			result[i] = '0';
 		else
-			result_string[i] = 1;
+			result[i] = '1';
 	}
 
-	result.bit = binary(result_string);
-
-	return result;
+	return QInt(2,result);
 }
 
 QInt QInt::operator~()
 {
-	QInt result;
 	string value = this->bit.to_string();
 
 	for (int i = 0; i < value.size(); i++) {
-		if (value[i] == 0)
-			value[i] == 1;
-		else if (value[i] == 1)
-			value[i] == 0;
+		if (value[i] == '0')
+			value[i] == '1';
+		else if (value[i] == '1')
+			value[i] == '0';
 	}
 
-	result.bit = binary(value);
-
-	return result;
+	return QInt(2, value);
 }
 
 QInt QInt::operator>>(int step)
@@ -171,5 +156,14 @@ QInt QInt::operator>>(int step)
 QInt QInt::operator<<(int step)
 {
 	return QInt();
+}
+
+void print(QInt x)
+{
+	string output = x.bit.to_string();
+
+	for (int i = 0; i < output.size(); i++) {
+		cout << output[i];
+	}
 }
 

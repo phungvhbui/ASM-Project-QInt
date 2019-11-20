@@ -43,4 +43,6 @@ public:
 	//Roll
 	QInt rol();
 	QInt ror();
+
+	friend void print(QInt x);
 };
