@@ -57,7 +57,7 @@ string QInt::HexToBin(string hex)
 }
 
 //Arithmetic
-QInt QInt::operator=(QInt const& Qint)
+QInt& QInt::operator=(QInt const& Qint)
 {
 	this->bit = Qint.bit;
 	return (*this);
@@ -65,18 +65,63 @@ QInt QInt::operator=(QInt const& Qint)
 
 QInt QInt::operator+(const QInt& Qint2)
 {
-	return QInt();
+	QInt result;
+	int carry = 0;
+	/*while (Qint2.bit != 0) {
+		for (int i = 0; i < this->bit.size(); i++) {
+			carry.bit[i] = this->bit[i] & Qint2.bit[i];
+		}
+		this->bit = this->bit ^ Qint2.bit;
+
+	}*/
+
+	for (int i = 0; i < this->bit.size(); i++) {
+		if (this->bit[i] == 0 && Qint2.bit[i] == 0) {
+			result.bit[i] = 0 ^ carry;
+			carry = 0;
+		}
+		else if ((this->bit[i] & Qint2.bit[i]) == 0) {
+			if (carry == 1) {
+				result.bit[i] = 0;
+				carry = 0;
+				carry++;
+			}
+			else if (carry == 0) {
+				result.bit[i] = 1;
+			}
+		}
+		else
+		{
+			result.bit[i] = (this->bit[i] ^ Qint2.bit[i]) ^ carry;
+			carry = 0;
+			carry++;
+		}
+		//if((carry == 1 && (this->bit[i] == 1 || Qint2.bit[i] == 1)) || (carry == 1 && (this->bit[i] == 1 && Qint2.bit[i] == 1)) || (carry == 0 && (this->bit[i] == 1 && Qint2.bit[i] == 1)))
+	}
+
+
+	return result;
 }
 
 QInt QInt::operator-(const QInt& Qint2)
 {
-	return QInt();
+	QInt result, temp = Qint2;
+	temp = ~temp;
+	temp = temp + ONE;
+	result = *this + temp;
+	return result;
 }
 
 QInt QInt::operator*(const QInt& Qint2)
 {
-	
-	return QInt();
+	QInt result,temp;
+	for (int i = 0; i < Qint2.bit.size(); i++) {
+		if (Qint2.bit[i] == 1) {
+			result = result + *this;
+		}
+		this->bit = this->bit << 1;
+	}
+	return result;
 }
 
 QInt QInt::operator/(const QInt& Qint2)
@@ -134,23 +179,22 @@ QInt QInt::operator^(const QInt& Qint2)
 	return QInt(2,result);
 }
 
-QInt QInt::operator~()
+QInt& QInt::operator~()
 {
-	string value = this->bit.to_string();
 
-	for (int i = 0; i < value.size(); i++) {
-		if (value[i] == '0')
-			value[i] = '1';
-		else if (value[i] == '1')
-			value[i] = '0';
+	for (int i = 0; i < this->bit.size(); i++) {
+		if (this->bit[i] == 0)
+			this->bit[i] = 1;
+		else if (this->bit[i] == 1)
+			this->bit[i] = 0;
 	}
-
-	return QInt(2, value);
+	return *this;
 }
 
 QInt QInt::operator>>(int step)
 {
-	return QInt();
+	
+	return *this;
 }
 
 QInt QInt::operator<<(int step)
@@ -160,10 +204,10 @@ QInt QInt::operator<<(int step)
 
 void print(QInt x)
 {
-	string output = x.bit.to_string();
+	//string output = x.bit.to_string();
 
-	for (int i = 0; i < output.size(); i++) {
-		cout << output[i];
+ 	for (int i = x.bit.size() - 1; i >=0 ; i--) {
+		cout << x.bit[i];
 	}
 }
 
