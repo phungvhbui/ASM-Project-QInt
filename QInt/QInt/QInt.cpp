@@ -133,55 +133,48 @@ QInt QInt::operator/(const QInt& Qint2)
 //Bitwise
 QInt QInt::operator&(const QInt& Qint2)
 {
-	string result = QInt().bit.to_string();
-	string value1 = this->bit.to_string();
-	string value2 = Qint2.bit.to_string();
+	QInt result;
 
-	for (int i = 0; i < value1.size(); i++) {
-		if (value1[i] == '1' && value2[i] == '1')
-			result[i] = '1';
+	for (int i = 0; i < Qint2.bit.size(); i++) {
+		if (this->bit[i] == 1 && Qint2.bit[i] == 1)
+			result.bit[i] = 1;
 		else
-			result[i] = '0';
+			result.bit[i] = 0;
 	}
 
-	return QInt(2, result);
+	return result;
 }
 
 QInt QInt::operator|(const QInt& Qint2)
 {
-	string result = QInt().bit.to_string();
-	string value1 = this->bit.to_string();
-	string value2 = Qint2.bit.to_string();
-
-	for (int i = 0; i < value1.size(); i++) {
-		if (value1[i] == '0' && value2[i] == '0')
-			result[i] = '0';
+	QInt result;
+	
+	for (int i = 0; i < Qint2.bit.size(); i++) {
+		if (this->bit[i] == 0 && Qint2.bit[i] == 0)
+			result.bit[i] = 0;
 		else
-			result[i] = '1';
+			result.bit[i] = 1;
 	}
 
-	return QInt(2, result);
+	return result;
 }
 
 QInt QInt::operator^(const QInt& Qint2)
 {
-	string result = QInt().bit.to_string();
-	string value1 = this->bit.to_string();
-	string value2 = Qint2.bit.to_string();
+	QInt result;
 
-	for (int i = 0; i < value1.size(); i++) {
-		if (value1[i] == value2[i])
-			result[i] = '0';
+	for (int i = 0; i < Qint2.bit.size(); i++) {
+		if (this->bit[i] == Qint2.bit[i])
+			result.bit[i] = 0;
 		else
-			result[i] = '1';
+			result.bit[i] = 1;
 	}
 
-	return QInt(2,result);
+	return result;
 }
 
 QInt& QInt::operator~()
 {
-
 	for (int i = 0; i < this->bit.size(); i++) {
 		if (this->bit[i] == 0)
 			this->bit[i] = 1;
@@ -204,8 +197,6 @@ QInt QInt::operator<<(int step)
 
 void print(QInt x)
 {
-	//string output = x.bit.to_string();
-
  	for (int i = x.bit.size() - 1; i >=0 ; i--) {
 		cout << x.bit[i];
 	}
