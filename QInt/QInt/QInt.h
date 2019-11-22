@@ -2,6 +2,7 @@
 #include <iostream>
 #include <bitset>
 #include <string>
+#include <map>
 using namespace std;
 
 typedef bitset<128> binary;
@@ -25,6 +26,10 @@ public:
 	//friend string HexToDec(string hex);
 	//friend string DecToHex(string dec);
 
+	//Junction table
+	static map<string, char> map_BinHex();
+	static map<char, string> map_HexBin();
+
 	//Operator
 		//Arithmetic
 	QInt& operator=(QInt const& Qint);
@@ -44,5 +49,7 @@ public:
 	QInt rol();
 	QInt ror();
 
-	friend void print(QInt x);
+	void printbit();
 };
+
+string normalize(string s);

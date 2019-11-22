@@ -43,7 +43,27 @@ string QInt::BinToDec()
 
 string QInt::BinToHex()
 {
-	return string();
+	string val = (*this).bit.to_string();
+	string result;
+	map<string, char> map = map_BinHex();
+	int k = 1;
+	string temp;
+
+	for (int i = val.size() - 1; i >= 0; --i) {
+		if (k <= 4) {
+			k++;
+			temp = val[i] + temp;
+			continue;
+		}
+		else {
+			i++;
+			result = map[temp] + result;
+			k = 1;
+			temp.clear();
+		} 
+	}
+	result = normalize(result);
+	return result;
 }
 
 string QInt::DecToBin(string dec)
@@ -53,7 +73,58 @@ string QInt::DecToBin(string dec)
 
 string QInt::HexToBin(string hex)
 {
-	return string();
+	string result;
+	map<char, string> map = map_HexBin();
+	for (int i = 0; i < hex.length(); i++)
+	{
+		result = result + map[hex[i]];
+	}
+	result = normalize(result);
+	return result;
+}
+
+map<string,char> QInt::map_BinHex()
+{
+	map<string, char> juctBinHex;
+	juctBinHex["0000"] = '0';
+	juctBinHex["0001"] = '1';
+	juctBinHex["0010"] = '2';
+	juctBinHex["0011"] = '3';
+	juctBinHex["0100"] = '4';
+	juctBinHex["0101"] = '5';
+	juctBinHex["0110"] = '6';
+	juctBinHex["0111"] = '7';
+	juctBinHex["1000"] = '8';
+	juctBinHex["1001"] = '9';
+	juctBinHex["1010"] = 'A';
+	juctBinHex["1011"] = 'B';
+	juctBinHex["1100"] = 'C';
+	juctBinHex["1101"] = 'D';
+	juctBinHex["1110"] = 'E';
+	juctBinHex["1111"] = 'F';
+	return juctBinHex;
+}
+
+map<char, string> QInt::map_HexBin()
+{
+	map<char, string> juncHecBin;
+	juncHecBin['0'] = "0000";
+	juncHecBin['1'] = "0001";
+	juncHecBin['2'] = "0010";
+	juncHecBin['3'] = "0011";
+	juncHecBin['4'] = "0100";
+	juncHecBin['5'] = "0101";
+	juncHecBin['6'] = "0110";
+	juncHecBin['7'] = "0111";
+	juncHecBin['8'] = "1000";
+	juncHecBin['9'] = "1001";
+	juncHecBin['A'] = "1010";
+	juncHecBin['B'] = "1011";
+	juncHecBin['C'] = "1100";
+	juncHecBin['D'] = "1101";
+	juncHecBin['E'] = "1110";
+	juncHecBin['F'] = "1111";
+	return juncHecBin;
 }
 
 //Arithmetic
@@ -67,13 +138,6 @@ QInt QInt::operator+(const QInt& Qint2)
 {
 	QInt result;
 	int carry = 0;
-	/*while (Qint2.bit != 0) {
-		for (int i = 0; i < this->bit.size(); i++) {
-			carry.bit[i] = this->bit[i] & Qint2.bit[i];
-		}
-		this->bit = this->bit ^ Qint2.bit;
-
-	}*/
 
 	for (int i = 0; i < this->bit.size(); i++) {
 		if (this->bit[i] == 0 && Qint2.bit[i] == 0) {
@@ -96,10 +160,7 @@ QInt QInt::operator+(const QInt& Qint2)
 			carry = 0;
 			carry++;
 		}
-		//if((carry == 1 && (this->bit[i] == 1 || Qint2.bit[i] == 1)) || (carry == 1 && (this->bit[i] == 1 && Qint2.bit[i] == 1)) || (carry == 0 && (this->bit[i] == 1 && Qint2.bit[i] == 1)))
 	}
-
-
 	return result;
 }
 
@@ -114,7 +175,7 @@ QInt QInt::operator-(const QInt& Qint2)
 
 QInt QInt::operator*(const QInt& Qint2)
 {
-	QInt result,temp;
+	QInt result;
 	for (int i = 0; i < Qint2.bit.size(); i++) {
 		if (Qint2.bit[i] == 1) {
 			result = result + *this;
@@ -129,47 +190,40 @@ QInt QInt::operator/(const QInt& Qint2)
 	return QInt();
 }
 
-
 //Bitwise
 QInt QInt::operator&(const QInt& Qint2)
 {
 	QInt result;
-
 	for (int i = 0; i < Qint2.bit.size(); i++) {
 		if (this->bit[i] == 1 && Qint2.bit[i] == 1)
 			result.bit[i] = 1;
 		else
 			result.bit[i] = 0;
 	}
-
 	return result;
 }
 
 QInt QInt::operator|(const QInt& Qint2)
 {
 	QInt result;
-	
 	for (int i = 0; i < Qint2.bit.size(); i++) {
 		if (this->bit[i] == 0 && Qint2.bit[i] == 0)
 			result.bit[i] = 0;
 		else
 			result.bit[i] = 1;
 	}
-
 	return result;
 }
 
 QInt QInt::operator^(const QInt& Qint2)
 {
 	QInt result;
-
 	for (int i = 0; i < Qint2.bit.size(); i++) {
 		if (this->bit[i] == Qint2.bit[i])
 			result.bit[i] = 0;
 		else
 			result.bit[i] = 1;
 	}
-
 	return result;
 }
 
@@ -195,10 +249,16 @@ QInt QInt::operator<<(int step)
 	return QInt();
 }
 
-void print(QInt x)
+void QInt::printbit()
 {
- 	for (int i = x.bit.size() - 1; i >=0 ; i--) {
-		cout << x.bit[i];
+ 	for (int i = (*this).bit.size() - 1; i >=0 ; i--) {
+		cout << (*this).bit[i];
 	}
 }
 
+string normalize(string s) {
+	int i = 1;
+	while (s[i] == s[i - 1]) 
+		i++;
+	return s.substr(i);
+}
