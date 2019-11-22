@@ -175,6 +175,7 @@ QInt QInt::operator-(const QInt& Qint2)
 QInt QInt::operator*(const QInt& Qint2)
 {
 	QInt result;
+	
 	for (int i = 0; i < Qint2.bit.size(); i++) {
 		if (Qint2.bit[i] == 1) {
 			result = result + *this;
@@ -186,7 +187,36 @@ QInt QInt::operator*(const QInt& Qint2)
 
 QInt QInt::operator/(const QInt& Qint2)
 {
-	return QInt();
+	QInt result(2, "0");
+	QInt temp = Qint2;
+	QInt one(2, "1");
+	QInt epsilon;
+	int flag = 0;
+	if (this->bit[127] == 1) {
+		*this = *this - one;
+		*this = ~(*this);
+		flag++;
+	}
+	if (temp.bit[127] == 1) {
+		temp = temp - one;
+		temp = ~temp;
+		flag++;
+	}
+	/*do {
+		*this = *this - Qint2;
+		result = result + one;
+		epsilon = *this - Qint2;
+	} */
+	while (epsilon.bit[127] == 0){
+		*this = *this - temp;
+		result = result + one;
+		epsilon = *this - temp;
+	};
+	if (flag == 1) {
+		result = ~result;
+		result = result + one;
+	}
+	return result;
 }
 
 //Bitwise
@@ -226,6 +256,11 @@ QInt QInt::operator^(const QInt& Qint2)
 	return result;
 }
 
+bool QInt::operator<(const QInt& Qint2)
+{
+	return true;
+}
+
 QInt& QInt::operator~()
 {
 	for (int i = 0; i < this->bit.size(); i++) {
@@ -239,19 +274,45 @@ QInt& QInt::operator~()
 
 QInt QInt::operator>>(int step)
 {
-	
+	for (int i = step; i <127; i++) {
+		this->bit[i - step] = this->bit[i];
+	}
+	if (this->bit[127] == 1) {
+		
+		for (int i = 126; i >= 126 - step; i--) {
+			this->bit[i] = 1;
+		}
+	}
+	else {
+		for (int i = 126; i >= 126 - step; i--) {
+			this->bit[i] = 0;
+		}
+	}
 	return *this;
 }
 
 QInt QInt::operator<<(int step)
 {
-	return QInt();
+	for (int i = 127 - step; i >= 0; i--) {
+		this->bit[i - step] = this->bit[i];
+	}
+	if (this->bit[127] == 1) {
+
+		for (int i = 126; i >= 126 - step; i--) {
+			this->bit[i] = 1;
+		}
+	}
+	else {
+		for (int i = 126; i >= 126 - step; i--) {
+			this->bit[i] = 0;
+		}
+	}
+	return *this;
 }
 
 void QInt::printbit()
 {
 	string bit = (*this).bit.to_string();
-	bit = normalize(bit);
  	for (int i = 0; i <bit.size() ; i++) {
 		cout << bit[i];
 	}

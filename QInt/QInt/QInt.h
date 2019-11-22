@@ -41,6 +41,7 @@ public:
 	QInt operator&(const QInt& Qint2);
 	QInt operator|(const QInt& Qint2);
 	QInt operator^(const QInt& Qint2);
+	bool operator<(const QInt& Qint2);
 	QInt& operator~();
 	QInt operator>>(int step);
 	QInt operator<<(int step);
