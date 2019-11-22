@@ -6,7 +6,6 @@
 using namespace std;
 
 typedef bitset<128> binary;
-#define ONE QInt(2, "1");
 
 class QInt
 {
@@ -23,9 +22,6 @@ public:
 	static string DecToBin(string dec);
 	static string HexToBin(string hex);
 
-	//friend string HexToDec(string hex);
-	//friend string DecToHex(string dec);
-
 	//Junction table
 	static map<string, char> map_BinHex();
 	static map<char, string> map_HexBin();
@@ -41,7 +37,6 @@ public:
 	QInt operator&(const QInt& Qint2);
 	QInt operator|(const QInt& Qint2);
 	QInt operator^(const QInt& Qint2);
-	bool operator<(const QInt& Qint2);
 	QInt& operator~();
 	QInt operator>>(int step);
 	QInt operator<<(int step);

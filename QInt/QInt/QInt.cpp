@@ -17,7 +17,7 @@ QInt::QInt(uint16_t mode, string s)
 
 	else if (mode == 10) {
 		bool isNegative = false;
-		if (s[0]=='-')
+		if (s[0] == '-')
 		{
 			isNegative = true;
 			s = s.substr(1);
@@ -28,7 +28,7 @@ QInt::QInt(uint16_t mode, string s)
 		if (isNegative)
 		{
 			bit = ~bit;
-			*this = *this + ONE;
+			*this = *this + QInt(2, "1");
 		}
 	}
 
@@ -38,7 +38,25 @@ QInt::QInt(uint16_t mode, string s)
 
 string QInt::BinToDec()
 {
-	return string();
+	int negative = false;
+	if ((*this).bit[127] == 1)
+		negative = true;
+
+	if (negative) {
+		*this = *this - QInt(2, "1");
+		*this = ~(*this);
+	}
+
+	int result = 0;
+	for (int i = 0; i < (*this).bit.size(); i++) {
+		if ((*this).bit[i] == 1)
+			result += pow(2, i);
+	}
+
+	if (negative)
+		result = (-1) * result;
+
+	return to_string(result);
 }
 
 string QInt::BinToHex()
@@ -68,7 +86,16 @@ string QInt::BinToHex()
 
 string QInt::DecToBin(string dec)
 {
-	return string();
+	string result;
+	int num = stoi(dec);
+	int remainder = 0;
+
+	while (num > 0) {
+		remainder = num % 2;
+		num = num / 2;
+		result = to_string(remainder) + result;
+	}
+	return result;
 }
 
 string QInt::HexToBin(string hex)
@@ -167,7 +194,7 @@ QInt QInt::operator-(const QInt& Qint2)
 {
 	QInt result, temp = Qint2;
 	temp = ~temp;
-	temp = temp + ONE;
+	temp = temp + QInt(2,"1");
 	result = *this + temp;
 	return result;
 }
@@ -175,7 +202,6 @@ QInt QInt::operator-(const QInt& Qint2)
 QInt QInt::operator*(const QInt& Qint2)
 {
 	QInt result;
-	
 	for (int i = 0; i < Qint2.bit.size(); i++) {
 		if (Qint2.bit[i] == 1) {
 			result = result + *this;
@@ -187,36 +213,7 @@ QInt QInt::operator*(const QInt& Qint2)
 
 QInt QInt::operator/(const QInt& Qint2)
 {
-	QInt result(2, "0");
-	QInt temp = Qint2;
-	QInt one(2, "1");
-	QInt epsilon;
-	int flag = 0;
-	if (this->bit[127] == 1) {
-		*this = *this - one;
-		*this = ~(*this);
-		flag++;
-	}
-	if (temp.bit[127] == 1) {
-		temp = temp - one;
-		temp = ~temp;
-		flag++;
-	}
-	/*do {
-		*this = *this - Qint2;
-		result = result + one;
-		epsilon = *this - Qint2;
-	} */
-	while (epsilon.bit[127] == 0){
-		*this = *this - temp;
-		result = result + one;
-		epsilon = *this - temp;
-	};
-	if (flag == 1) {
-		result = ~result;
-		result = result + one;
-	}
-	return result;
+	return QInt();
 }
 
 //Bitwise
@@ -256,11 +253,6 @@ QInt QInt::operator^(const QInt& Qint2)
 	return result;
 }
 
-bool QInt::operator<(const QInt& Qint2)
-{
-	return true;
-}
-
 QInt& QInt::operator~()
 {
 	for (int i = 0; i < this->bit.size(); i++) {
@@ -274,47 +266,19 @@ QInt& QInt::operator~()
 
 QInt QInt::operator>>(int step)
 {
-	for (int i = step; i <127; i++) {
-		this->bit[i - step] = this->bit[i];
-	}
-	if (this->bit[127] == 1) {
-		
-		for (int i = 126; i >= 126 - step; i--) {
-			this->bit[i] = 1;
-		}
-	}
-	else {
-		for (int i = 126; i >= 126 - step; i--) {
-			this->bit[i] = 0;
-		}
-	}
+	
 	return *this;
 }
 
 QInt QInt::operator<<(int step)
 {
-	for (int i = 127 - step; i >= 0; i--) {
-		this->bit[i - step] = this->bit[i];
-	}
-	if (this->bit[127] == 1) {
-
-		for (int i = 126; i >= 126 - step; i--) {
-			this->bit[i] = 1;
-		}
-	}
-	else {
-		for (int i = 126; i >= 126 - step; i--) {
-			this->bit[i] = 0;
-		}
-	}
-	return *this;
+	return QInt();
 }
 
 void QInt::printbit()
 {
-	string bit = (*this).bit.to_string();
- 	for (int i = 0; i <bit.size() ; i++) {
-		cout << bit[i];
+	for (int i = (*this).bit.size() - 1; i >= 0; i--) {
+		cout << (*this).bit[i];
 	}
 }
 
