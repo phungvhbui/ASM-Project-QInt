@@ -1,8 +1,10 @@
 #include "QInt.h"
 
 int main() {
-	QInt num(2, "1111");
-	QInt num2(2, "11");
-	QInt result	= num * num2;
-	print(result);
+	QInt num(2, "110100011");
+	string result = num.BinToHex();
+	cout << result << endl;
+
+	QInt num2(16, "1A3");
+	num2.printbit();
 }

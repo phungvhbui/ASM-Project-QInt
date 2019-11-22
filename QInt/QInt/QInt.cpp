@@ -79,7 +79,6 @@ string QInt::HexToBin(string hex)
 	{
 		result = result + map[hex[i]];
 	}
-	result = normalize(result);
 	return result;
 }
 
@@ -251,14 +250,16 @@ QInt QInt::operator<<(int step)
 
 void QInt::printbit()
 {
- 	for (int i = (*this).bit.size() - 1; i >=0 ; i--) {
-		cout << (*this).bit[i];
+	string bit = (*this).bit.to_string();
+	bit = normalize(bit);
+ 	for (int i = 0; i <bit.size() ; i++) {
+		cout << bit[i];
 	}
 }
 
 string normalize(string s) {
 	int i = 1;
-	while (s[i] == s[i - 1]) 
+	while (s[i] == s[i - 1] && s[i] == '0') 
 		i++;
 	return s.substr(i);
 }
