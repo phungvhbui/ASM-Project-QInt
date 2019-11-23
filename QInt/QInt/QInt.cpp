@@ -304,12 +304,26 @@ QInt QInt::operator<<(int step)
 
 QInt QInt::rol()
 {
-	return QInt();
+	QInt result;
+	int i = 127;
+	while ((*this).bit[i] == 0)
+		i--;
+	bool carry = (*this).bit[i];
+	result = (*this) << 1;
+	result.bit[0] = carry;
+	return result;
 }
 
 QInt QInt::ror()
 {
-	return QInt();
+	QInt result;
+	int i = 127;
+	while ((*this).bit[i] == 0)
+		i--;
+	bool carry = (*this).bit[0];
+	result = (*this) >> 1;
+	result.bit[i] = carry;
+	return result;
 }
 
 void QInt::printbit()
