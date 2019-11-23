@@ -46,6 +46,7 @@ public:
 	QInt ror();
 
 	void printbit();
+	string printAsMode(uint16_t mode);
 };
 
 string normalize(string s);

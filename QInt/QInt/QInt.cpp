@@ -87,7 +87,7 @@ string QInt::BinToHex()
 string QInt::DecToBin(string dec)
 {
 	string result;
-	int num = stoi(dec);
+	uint16_t num = stoi(dec);
 	int remainder = 0;
 
 	while (num > 0) {
@@ -280,6 +280,17 @@ void QInt::printbit()
 	for (int i = (*this).bit.size() - 1; i >= 0; i--) {
 		cout << (*this).bit[i];
 	}
+}
+
+string QInt::printAsMode(uint16_t mode)
+{
+	if (mode == 10)
+		return (*this).BinToDec();
+	if (mode == 2)
+		return (*this).bit.to_string();
+	if (mode == 16)
+		return (*this).BinToHex();
+	return string();
 }
 
 string normalize(string s) {

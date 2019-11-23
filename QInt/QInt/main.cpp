@@ -1,9 +1,13 @@
-#include "QInt.h"
+#include "FileHandle.h"
 
 int main() {
-	QInt num1(2,   "11011");
-	QInt num2(2,   "11111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111110000");
-	QInt num3(10, "-16");
-	num3.printbit();
+	if (Calculator("input.txt", "output.txt") == true)
+	{
+		cout << "Data is calculated. Please check output.txt" << endl;
+	}
+	else
+	{
+		cout << "Error in file/program. Canceling program..." << endl;
+	}
 	return 0;
 }
