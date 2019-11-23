@@ -266,11 +266,48 @@ QInt& QInt::operator~()
 
 QInt QInt::operator>>(int step)
 {
-	
+	for (int i = step; i < 127; i++) {
+		this->bit[i - step] = this->bit[i];
+	}
+	if (this->bit[127] == 1) {
+
+		for (int i = 126; i >= 126 - step; i--) {
+			this->bit[i] = 1;
+		}
+	}
+	else {
+		for (int i = 126; i >= 126 - step; i--) {
+			this->bit[i] = 0;
+		}
+	}
 	return *this;
 }
 
 QInt QInt::operator<<(int step)
+{
+	for (int i = 127 - step; i >= 0; i--) {
+		this->bit[i - step] = this->bit[i];
+	}
+	if (this->bit[127] == 1) {
+
+		for (int i = 126; i >= 126 - step; i--) {
+			this->bit[i] = 1;
+		}
+	}
+	else {
+		for (int i = 126; i >= 126 - step; i--) {
+			this->bit[i] = 0;
+		}
+	}
+	return *this;
+}
+
+QInt QInt::rol()
+{
+	return QInt();
+}
+
+QInt QInt::ror()
 {
 	return QInt();
 }
