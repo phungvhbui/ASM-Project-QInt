@@ -36,8 +36,39 @@ QInt::QInt(uint16_t mode, string s)
 		this->bit = binary(HexToBin(s));
 }
 
+int* QInt::Addition(int *ResultArray, int * SaveNumber, int n, int bit) {
+	int reminder = 0;
+	
+	if (bit == 1) {
+		for (int i = n-1; i >=0; i--) {
+			ResultArray[i] = ResultArray[i] + SaveNumber[i] + reminder;
+			reminder = 0;
+			if (ResultArray[i] >= 10) {
+				ResultArray[i] = ResultArray[i] % 10;
+				reminder++;
+			}
+		}
+	}
+
+	reminder = 0;
+	for (int i = n - 1; i >= 0; i--) {
+		SaveNumber[i] = SaveNumber[i] * 2 + reminder;
+		reminder = 0;
+		if (SaveNumber[i] >= 10) {
+			SaveNumber[i] = SaveNumber[i] % 10;
+			reminder++;
+		}
+	}
+	return ResultArray;
+}
+
 string QInt::BinToDec()
 {
+	string number = "";
+	int n = 40;
+	int* ResultArray = new int[n]{ 0 };
+	int* SaveNumber = new int[n]{ 0 };
+	SaveNumber[39] = 1;
 	int negative = false;
 	if ((*this).bit[127] == 1)
 		negative = true;
@@ -47,16 +78,18 @@ string QInt::BinToDec()
 		*this = ~(*this);
 	}
 
-	int result = 0;
 	for (int i = 0; i < (*this).bit.size(); i++) {
-		if ((*this).bit[i] == 1)
-			result += pow(2, i);
+		ResultArray = Addition(ResultArray, SaveNumber, n, this->bit[i]);
 	}
-
-	if (negative)
-		result = (-1) * result;
-
-	return to_string(result);
+	for (int i = 0; i < n; i++) {
+		number = number + to_string(ResultArray[i]);
+	}
+	
+	number.erase(0, number.find_first_not_of("0"));
+	if (negative) {
+		number = "-" + number;
+	}
+	return number;
 }
 
 string QInt::BinToHex()
@@ -348,3 +381,28 @@ string normalize(string s) {
 		i++;
 	return s.substr(i);
 }
+
+
+/*int* Addition(int* ResultArray, int* SaveNumber, int n, int bit) {
+	int reminder = 0;
+	for (int i = n - 1; i >=0; i--) {
+		SaveNumber[i] = SaveNumber[i] * 2 + reminder;
+		reminder = 0;
+		if (SaveNumber[i] >= 10) {
+			SaveNumber[i] = SaveNumber[i] % 10;
+			reminder++;
+		}
+	}
+	reminder = 0;
+	if (bit == 1) {
+		for (int i = n-1; i >=0; i--) {
+			ResultArray[i] = ResultArray[i] + SaveNumber[i] + reminder;
+			reminder = 0;
+			if (ResultArray[i] >= 10) {
+				ResultArray[i] = ResultArray[i] % 10;
+				reminder++;
+			}
+		}
+	}
+	return ResultArray;
+}*/

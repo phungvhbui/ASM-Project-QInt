@@ -47,6 +47,9 @@ public:
 
 	void printbit();
 	string printAsMode(uint16_t mode);
+	int* Addition(int* ResultArray, int* SaveNumber, int n, int i);
 };
 
 string normalize(string s);
+
+//int* Addition(int* ResultArray, int* SaveNumber, int n, int bit);
