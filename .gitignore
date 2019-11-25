@@ -17,3 +17,5 @@ QInt/Project/.vs/Project/v16/.suo
 *.idb
 *.enc
 QInt/QInt/input.txt
+*.iobj
+*.ipdb

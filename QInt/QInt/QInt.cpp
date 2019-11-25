@@ -36,11 +36,11 @@ QInt::QInt(uint16_t mode, string s)
 		this->bit = binary(HexToBin(s));
 }
 
-int* QInt::Addition(int *ResultArray, int * SaveNumber, int n, int bit) {
+int* QInt::Addition(int* ResultArray, int* SaveNumber, int n, int bit) {
 	int reminder = 0;
-	
+
 	if (bit == 1) {
-		for (int i = n-1; i >=0; i--) {
+		for (int i = n - 1; i >= 0; i--) {
 			ResultArray[i] = ResultArray[i] + SaveNumber[i] + reminder;
 			reminder = 0;
 			if (ResultArray[i] >= 10) {
@@ -93,8 +93,8 @@ string QInt::BinToDec()
 	if (negative) {
 		number = "-" + number;
 	}
-	delete ResultArray;
-	delete SaveNumber;
+	delete [] ResultArray;
+	delete [] SaveNumber;
 	return number;
 }
 
@@ -267,33 +267,58 @@ QInt QInt::operator*(const QInt& Qint2)
 	return result;
 }
 
-QInt QInt::operator/(const QInt& Qint2)
+QInt QInt::operator/(const QInt& Qint2) //Non-restore division
 {
-	QInt result(2, "0");
-	QInt temp = Qint2;
-	QInt one(2, "1");
-	QInt epsilon;
 	int flag = 0;
-	if (this->bit[127] == 1) {
-		*this = *this - one;
+
+	if ((*this).bit[127] == 1)
+	{
+		*this = (*this) - QInt(2, "1");
 		*this = ~(*this);
 		flag++;
 	}
-	if (temp.bit[127] == 1) {
-		temp = temp - one;
-		temp = ~temp;
+
+	QInt Quotent = (*this);
+	QInt Divisor = Qint2;
+
+	if ((Divisor).bit[127] == 1)
+	{
+		Divisor = Divisor - QInt(2, "1");
+		Divisor = ~Divisor;
 		flag++;
 	}
-	while (epsilon.bit[127] == 0) {
-		*this = *this - temp;
-		result = result + one;
-		epsilon = *this - temp;
-	};
-	if (flag == 1) {
-		result = ~result;
-		result = result + one;
+
+	QInt Remainder;
+
+	for (int i = 0; i < 128; i++) {
+
+		bool carry = Quotent.bit[127];
+
+		Remainder = Remainder << 1;
+		Quotent = Quotent << 1;
+
+		Remainder.bit[0] = carry;
+
+		if (Remainder.bit[127] == 0)
+			Remainder = Remainder - Divisor;
+		else
+			Remainder = Remainder + Divisor;
+
+		if (Remainder.bit[127] == 0)
+			Quotent.bit[0] = 1;
+		else
+			Quotent.bit[0] = 0;
 	}
-	return result;
+
+	if (Remainder.bit[127] == 1)
+		Remainder = Remainder + Divisor;
+
+	if (flag == 1) {
+		Quotent = ~Quotent;
+		Quotent = Quotent + QInt(2, "1");
+	}
+
+	return Quotent;
 }
 
 //Bitwise
