@@ -88,7 +88,8 @@ string QInt::BinToDec()
 		number = number + to_string(ResultArray[i]);
 	}
 	
-	number.erase(0, number.find_first_not_of("0"));
+	number = normalize(number);
+
 	if (negative) {
 		number = "-" + number;
 	}
@@ -101,36 +102,31 @@ string QInt::BinToHex()
 {
 	string val = (*this).bit.to_string();
 	string result;
-	int k = 1;
 	string temp;
+	int i = 0;
 
-	for (int i = val.size() - 1; i >= 0; --i) {
-		if (k <= 4) {
-			k++;
-			temp = val[i] + temp;
-			continue;
+	while(i < val.size()) {
+		while(temp.size() <= 3) {
+			temp = temp + val[i];
+			++i;
 		}
-		else {
-			i++;
-			QInt data(2, temp);
-			string MapToHex = data.BinToDec();
-			if (MapToHex == "10")
-				MapToHex = "A";
-			else if(MapToHex =="11")
-				MapToHex = "B";
-			else if (MapToHex == "12")
-				MapToHex = "C";
-			else if (MapToHex == "13")
-				MapToHex = "D";
-			else if (MapToHex == "14")
-				MapToHex = "E"; 
-			else if (MapToHex == "15")
-				MapToHex = "F";
+		QInt data(2, temp);
+		string MapToHex = data.BinToDec();
+		if (MapToHex == "10")
+			MapToHex = "A";
+		else if(MapToHex =="11")
+			MapToHex = "B";
+		else if (MapToHex == "12")
+			MapToHex = "C";
+		else if (MapToHex == "13")
+			MapToHex = "D";
+		else if (MapToHex == "14")
+			MapToHex = "E"; 
+		else if (MapToHex == "15")
+			MapToHex = "F";
 
-			result = MapToHex + result;
-			k = 1;
-			temp.clear();
-		} 
+		result = result + MapToHex;
+		temp.clear();
 	}
 	result = normalize(result);
 	return result;
@@ -387,10 +383,7 @@ QInt QInt::operator<<(int step)
 QInt QInt::rol()
 {
 	QInt result;
-	int i = 127;
-	while ((*this).bit[i] == 0)
-		i--;
-	bool carry = (*this).bit[i];
+	bool carry = (*this).bit[127];
 	result = (*this) << 1;
 	result.bit[0] = carry;
 	return result;
@@ -399,12 +392,9 @@ QInt QInt::rol()
 QInt QInt::ror()
 {
 	QInt result;
-	int i = 127;
-	while ((*this).bit[i] == 0)
-		i--;
 	bool carry = (*this).bit[0];
 	result = (*this) >> 1;
-	result.bit[i] = carry;
+	result.bit[127] = carry;
 	return result;
 }
 
@@ -422,8 +412,8 @@ string QInt::printAsMode(uint16_t mode)
 		result = (*this).BinToDec();
 	if (mode == 2)
 	{
-
 		result = (*this).bit.to_string();
+		result = normalize(result);
 	}
 	if (mode == 16)
 		result = (*this).BinToHex();
@@ -431,8 +421,6 @@ string QInt::printAsMode(uint16_t mode)
 }
 
 string normalize(string s) {
-	int i = 1;
-	while (s[i] == s[i - 1] && s[i] == '0') 
-		i++;
+	int i = s.find_first_not_of("0");
 	return s.substr(i);
 }

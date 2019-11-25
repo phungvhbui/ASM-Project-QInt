@@ -9,7 +9,10 @@ bool Calculator(string input, string output)
 	
 	vector<string> Operands;
 	string temp;
+	int i = 0;
 	while (fin.peek() != EOF) {
+		cout << "Line #" << i << " is calculated" << endl;
+		i++;
 		Operands.clear();
 
 		//Get elements from a line in file
@@ -38,10 +41,10 @@ bool Calculator(string input, string output)
 				val = ~val;
 			}
 			else if (Operands[1] == "rol") {
-				//val = val.rol(); Unfinish function
+				val = val.rol();
 			}
 			else if (Operands[1] == "ror") {
-				//val = val.ror(); Unfinish function
+				val = val.ror();
 			}
 			else
 			{
@@ -66,6 +69,12 @@ bool Calculator(string input, string output)
 					result = val1 * val2;
 				else if (Operands[2] == "/")
 					result = val1 / val2;
+				else if (Operands[2] == "&")
+					result = val1 & val2;
+				else if (Operands[2] == "|")
+					result = val1 | val2;		
+				else if (Operands[2] == "^")
+					result = val1 ^ val2;		
 				else
 				{
 					WriteFile(output, "");

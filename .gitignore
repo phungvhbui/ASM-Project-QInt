@@ -15,3 +15,5 @@ QInt/Project/.vs/Project/v16/.suo
 *.log
 *.pdb
 *.idb
+*.enc
+QInt/QInt/input.txt
