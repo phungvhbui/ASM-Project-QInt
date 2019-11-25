@@ -21,7 +21,8 @@ public:
 	string BinToHex();
 	static string DecToBin(string dec);
 	static string HexToBin(string hex);
-
+	static string CheckEven(string number);
+	static string DivideBy2(string dec);
 	//Junction table
 	static map<string, char> map_BinHex();
 	static map<char, string> map_HexBin();

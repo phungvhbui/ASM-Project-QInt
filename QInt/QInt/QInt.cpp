@@ -89,6 +89,8 @@ string QInt::BinToDec()
 	if (negative) {
 		number = "-" + number;
 	}
+	delete ResultArray;
+	delete SaveNumber;
 	return number;
 }
 
@@ -117,16 +119,45 @@ string QInt::BinToHex()
 	return result;
 }
 
+string QInt::CheckEven(string number) {
+	string remainder;
+	if (number[number.size() - 1] % 2 == 0) {
+		remainder = "0";
+	}
+	else {
+		remainder = "1";
+	}
+	return remainder;
+}
+
+string QInt::DivideBy2(string dec) {
+	string ans;
+	int idx = 0;
+	int temp = dec[idx] - '0';
+	if (dec.size() < 2 && temp < 2) {
+			ans = "0";
+			return ans;
+	}
+	while (temp < 2)
+		
+		temp = temp * 10 + (dec[++idx] - '0');
+	while (dec.size() > idx)
+	{
+		ans += (temp / 2) + '0';
+		temp = (temp % 2) * 10 + dec[++idx] - '0';
+	}
+
+	if (ans.length() == 0)
+		return "0";
+	return ans;
+}
+
 string QInt::DecToBin(string dec)
 {
-	string result;
-	uint16_t num = stoi(dec);
-	int remainder = 0;
-
-	while (num > 0) {
-		remainder = num % 2;
-		num = num / 2;
-		result = to_string(remainder) + result;
+	string result = "";
+	while (dec != "0") {
+		result = CheckEven(dec) + result;
+		dec = DivideBy2(dec);
 	}
 	return result;
 }
