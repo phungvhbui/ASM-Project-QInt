@@ -64,6 +64,9 @@ int* QInt::Addition(int *ResultArray, int * SaveNumber, int n, int bit) {
 
 string QInt::BinToDec()
 {
+	int check = ((*this).bit.to_string()).find_first_not_of("0");
+	if (check == -1)
+		return "0";
 	string number = "";
 	int n = 40;
 	int* ResultArray = new int[n]{ 0 };
@@ -98,7 +101,6 @@ string QInt::BinToHex()
 {
 	string val = (*this).bit.to_string();
 	string result;
-	map<string, char> map = map_BinHex();
 	int k = 1;
 	string temp;
 
@@ -110,7 +112,22 @@ string QInt::BinToHex()
 		}
 		else {
 			i++;
-			result = map[temp] + result;
+			QInt data(2, temp);
+			string MapToHex = data.BinToDec();
+			if (MapToHex == "10")
+				MapToHex = "A";
+			else if(MapToHex =="11")
+				MapToHex = "B";
+			else if (MapToHex == "12")
+				MapToHex = "C";
+			else if (MapToHex == "13")
+				MapToHex = "D";
+			else if (MapToHex == "14")
+				MapToHex = "E"; 
+			else if (MapToHex == "15")
+				MapToHex = "F";
+
+			result = MapToHex + result;
 			k = 1;
 			temp.clear();
 		} 
@@ -154,67 +171,46 @@ string QInt::DivideBy2(string dec) {
 
 string QInt::DecToBin(string dec)
 {
+	bool isNegative = false;
+	if (dec[0] == '-') {
+		isNegative = true;
+		dec = dec.substr(1);
+	}
+
+
+	if (dec == "0")
+		return "0";
 	string result = "";
 	while (dec != "0") {
 		result = CheckEven(dec) + result;
 		dec = DivideBy2(dec);
 	}
+
+	if (isNegative) {
+		QInt temp;
+		temp.bit = binary(result);
+		temp = ~temp;
+		temp = temp + QInt(2, "1");
+		result = temp.bit.to_string();
+	}
+
 	return result;
 }
 
 string QInt::HexToBin(string hex)
 {
+	string HexData = "0123456789ABCDEF";
 	string result;
-	map<char, string> map = map_HexBin();
 	for (int i = 0; i < hex.length(); i++)
 	{
-		result = result + map[hex[i]];
+		int HexIndex = HexData.find(hex[i]);
+		string MapToBin = DecToBin(to_string(HexIndex));
+		while (MapToBin.size() < 4) {
+			MapToBin = '0' + MapToBin;
+		}
+		result = result + MapToBin;
 	}
 	return result;
-}
-
-map<string,char> QInt::map_BinHex()
-{
-	map<string, char> juctBinHex;
-	juctBinHex["0000"] = '0';
-	juctBinHex["0001"] = '1';
-	juctBinHex["0010"] = '2';
-	juctBinHex["0011"] = '3';
-	juctBinHex["0100"] = '4';
-	juctBinHex["0101"] = '5';
-	juctBinHex["0110"] = '6';
-	juctBinHex["0111"] = '7';
-	juctBinHex["1000"] = '8';
-	juctBinHex["1001"] = '9';
-	juctBinHex["1010"] = 'A';
-	juctBinHex["1011"] = 'B';
-	juctBinHex["1100"] = 'C';
-	juctBinHex["1101"] = 'D';
-	juctBinHex["1110"] = 'E';
-	juctBinHex["1111"] = 'F';
-	return juctBinHex;
-}
-
-map<char, string> QInt::map_HexBin()
-{
-	map<char, string> juncHecBin;
-	juncHecBin['0'] = "0000";
-	juncHecBin['1'] = "0001";
-	juncHecBin['2'] = "0010";
-	juncHecBin['3'] = "0011";
-	juncHecBin['4'] = "0100";
-	juncHecBin['5'] = "0101";
-	juncHecBin['6'] = "0110";
-	juncHecBin['7'] = "0111";
-	juncHecBin['8'] = "1000";
-	juncHecBin['9'] = "1001";
-	juncHecBin['A'] = "1010";
-	juncHecBin['B'] = "1011";
-	juncHecBin['C'] = "1100";
-	juncHecBin['D'] = "1101";
-	juncHecBin['E'] = "1110";
-	juncHecBin['F'] = "1111";
-	return juncHecBin;
 }
 
 //Arithmetic
@@ -277,7 +273,31 @@ QInt QInt::operator*(const QInt& Qint2)
 
 QInt QInt::operator/(const QInt& Qint2)
 {
-	return QInt();
+	QInt result(2, "0");
+	QInt temp = Qint2;
+	QInt one(2, "1");
+	QInt epsilon;
+	int flag = 0;
+	if (this->bit[127] == 1) {
+		*this = *this - one;
+		*this = ~(*this);
+		flag++;
+	}
+	if (temp.bit[127] == 1) {
+		temp = temp - one;
+		temp = ~temp;
+		flag++;
+	}
+	while (epsilon.bit[127] == 0) {
+		*this = *this - temp;
+		result = result + one;
+		epsilon = *this - temp;
+	};
+	if (flag == 1) {
+		result = ~result;
+		result = result + one;
+	}
+	return result;
 }
 
 //Bitwise
@@ -397,13 +417,17 @@ void QInt::printbit()
 
 string QInt::printAsMode(uint16_t mode)
 {
+	string result;
 	if (mode == 10)
-		return (*this).BinToDec();
+		result = (*this).BinToDec();
 	if (mode == 2)
-		return (*this).bit.to_string();
+	{
+
+		result = (*this).bit.to_string();
+	}
 	if (mode == 16)
-		return (*this).BinToHex();
-	return string();
+		result = (*this).BinToHex();
+	return result;
 }
 
 string normalize(string s) {
@@ -412,28 +436,3 @@ string normalize(string s) {
 		i++;
 	return s.substr(i);
 }
-
-
-/*int* Addition(int* ResultArray, int* SaveNumber, int n, int bit) {
-	int reminder = 0;
-	for (int i = n - 1; i >=0; i--) {
-		SaveNumber[i] = SaveNumber[i] * 2 + reminder;
-		reminder = 0;
-		if (SaveNumber[i] >= 10) {
-			SaveNumber[i] = SaveNumber[i] % 10;
-			reminder++;
-		}
-	}
-	reminder = 0;
-	if (bit == 1) {
-		for (int i = n-1; i >=0; i--) {
-			ResultArray[i] = ResultArray[i] + SaveNumber[i] + reminder;
-			reminder = 0;
-			if (ResultArray[i] >= 10) {
-				ResultArray[i] = ResultArray[i] % 10;
-				reminder++;
-			}
-		}
-	}
-	return ResultArray;
-}*/

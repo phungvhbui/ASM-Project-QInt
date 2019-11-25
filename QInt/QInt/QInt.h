@@ -23,9 +23,6 @@ public:
 	static string HexToBin(string hex);
 	static string CheckEven(string number);
 	static string DivideBy2(string dec);
-	//Junction table
-	static map<string, char> map_BinHex();
-	static map<char, string> map_HexBin();
 
 	//Operator
 		//Arithmetic
@@ -52,5 +49,3 @@ public:
 };
 
 string normalize(string s);
-
-//int* Addition(int* ResultArray, int* SaveNumber, int n, int bit);
