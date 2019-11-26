@@ -270,15 +270,15 @@ QInt QInt::operator*(const QInt& Qint2)
 QInt QInt::operator/(const QInt& Qint2) //Non-restore division
 {
 	int flag = 0;
+	QInt Quotent = (*this);
 
-	if ((*this).bit[127] == 1)
+	if (Quotent.bit[127] == 1)
 	{
-		*this = (*this) - QInt(2, "1");
-		*this = ~(*this);
+		Quotent = Quotent - QInt(2, "1");
+		Quotent = ~Quotent;
 		flag++;
 	}
 
-	QInt Quotent = (*this);
 	QInt Divisor = Qint2;
 
 	if ((Divisor).bit[127] == 1)
@@ -358,67 +358,70 @@ QInt QInt::operator^(const QInt& Qint2)
 	return result;
 }
 
-QInt& QInt::operator~()
+QInt QInt::operator~()
 {
-	for (int i = 0; i < this->bit.size(); i++) {
-		if (this->bit[i] == 0)
-			this->bit[i] = 1;
-		else if (this->bit[i] == 1)
-			this->bit[i] = 0;
+	QInt result = *this;
+	for (int i = 0; i < result.bit.size(); i++) {
+		if (result.bit[i] == 0)
+			result.bit[i] = 1;
+		else if (result.bit[i] == 1)
+			result.bit[i] = 0;
 	}
-	return *this;
+	return result;
 }
 
 QInt QInt::operator>>(int step)
 {
+	QInt result = *this;
 	if (step >= 127) {
 		step = 127;
 	}
 	for (int i = step; i < 127; i++) {
-		this->bit[i - step] = this->bit[i];
+		result.bit[i - step] = result.bit[i];
 	}
-	if (this->bit[127] == 1) {
+	if (result.bit[127] == 1) {
 
 		for (int i = 126; i > 126 - step; i--) {
-			this->bit[i] = 1;
+			result.bit[i] = 1;
 		}
 	}
 	else {
 		for (int i = 126; i > 126 - step; i--) {
-			this->bit[i] = 0;
+			result.bit[i] = 0;
 		}
 	}
-	return *this;
+	return result;
 }
 
 QInt QInt::operator<<(int step)
 {
+	QInt result = *this;
 	if (step >= 128) {
 		step = 128;
 	}
 	for (int i = 127 - step; i >= 0; i--) {
-		this->bit[i + step] = this->bit[i];
+		result.bit[i + step] = result.bit[i];
 	}
 	for (int i = 0; i < step; i++) {
-		this->bit[i] = 0;
+		result.bit[i] = 0;
 	}
-	return *this;
+	return result;
 }
 
 QInt QInt::rol()
 {
-	QInt result;
+	QInt result = *this;
 	bool carry = (*this).bit[127];
-	result = (*this) << 1;
+	result = result << 1;
 	result.bit[0] = carry;
 	return result;
 }
 
 QInt QInt::ror()
 {
-	QInt result;
+	QInt result = *this;
 	bool carry = (*this).bit[0];
-	result = (*this) >> 1;
+	result = result >> 1;
 	result.bit[127] = carry;
 	return result;
 }
@@ -447,5 +450,7 @@ string QInt::printAsMode(uint16_t mode)
 
 string normalize(string s) {
 	int i = s.find_first_not_of("0");
+	if (i == -1)
+		return "0";
 	return s.substr(i);
 }

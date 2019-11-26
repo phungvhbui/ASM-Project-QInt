@@ -68,7 +68,14 @@ bool Calculator(string input, string output)
 				else if (Operands[2] == "*")
 					result = val1 * val2;
 				else if (Operands[2] == "/")
+				{
+					if ((val2.printAsMode(2) == "0")) {
+						WriteFile(output, "");
+						fin.ignore();
+						continue;
+					}
 					result = val1 / val2;
+				}
 				else if (Operands[2] == "&")
 					result = val1 & val2;
 				else if (Operands[2] == "|")
