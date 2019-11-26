@@ -66,7 +66,6 @@ bool Calculator(string input, string output)
 					fin.ignore();
 					continue;
 				}
-
 				if (Operands[2] == "+")
 					result = val1 + val2;
 				else if (Operands[2] == "-")
