@@ -61,6 +61,11 @@ bool Calculator(string input, string output)
 				QInt val1 = QInt(mode, Operands[1]);
 				QInt val2 = QInt(mode, Operands[3]);
 
+				if (Operands[2] == "/" && val2.printAsMode(10) == "0") {
+					WriteFile(output, "");
+					fin.ignore();
+					continue;
+				}
 				if (Operands[2] == "+")
 					result = val1 + val2;
 				else if (Operands[2] == "-")
