@@ -289,29 +289,27 @@ QInt QInt::operator/(const QInt& Qint2) //Non-restore division
 	}
 
 	QInt Remainder;
+	int n = Quotent.bit.size();
 
-	for (int i = 0; i < 128; i++) {
-
+	while (n > 0) {
 		bool carry = Quotent.bit[127];
 
 		Remainder = Remainder << 1;
 		Quotent = Quotent << 1;
-
+			
 		Remainder.bit[0] = carry;
 
-		if (Remainder.bit[127] == 0)
-			Remainder = Remainder - Divisor;
-		else
-			Remainder = Remainder + Divisor;
+		Remainder = Remainder - Divisor;
 
-		if (Remainder.bit[127] == 0)
-			Quotent.bit[0] = 1;
-		else
+		if (Remainder.bit[127] == 1) {
 			Quotent.bit[0] = 0;
+			Remainder = Remainder + Divisor;
+		}
+		else
+			Quotent.bit[0] = 1;
+		
+		n = n - 1;
 	}
-
-	if (Remainder.bit[127] == 1)
-		Remainder = Remainder + Divisor;
 
 	if (flag == 1) {
 		Quotent = ~Quotent;
