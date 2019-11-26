@@ -173,7 +173,6 @@ string QInt::DecToBin(string dec)
 		dec = dec.substr(1);
 	}
 
-
 	if (dec == "0")
 		return "0";
 	string result = "";
