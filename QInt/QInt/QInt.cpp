@@ -134,7 +134,6 @@ string QInt::BinToHex()
 		result = result + MapToHex;
 		temp.clear();
 	}
-	result = normalize(result);
 	return result;
 }
 
@@ -464,8 +463,10 @@ string QInt::printAsMode(uint16_t mode)
 		result = (*this).bit.to_string();
 		result = normalize(result);
 	}
-	if (mode == 16)
+	if (mode == 16) {
 		result = (*this).BinToHex();
+		result = normalize(result);
+	}
 	return result;
 }
 
