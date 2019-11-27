@@ -17,8 +17,6 @@ bool Calculator(string input, string output)
 	string temp;
 	int i = 0;
 	while (fin.peek() != EOF) {
-		cout << "Line #" << i << " is calculated" << endl;
-		i++;
 		Operands.clear();
 
 		//Lấy các toán hạng của phép toán ở từng dòng từ file
