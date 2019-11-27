@@ -1,15 +1,18 @@
-#include "QInt.h"
+﻿#include "QInt.h"
 
+//Default constructor (trả về số 0)
 QInt::QInt()
 {
 	this->bit = QInt(2, "0").bit;
 }
 
+//Copy constructor
 QInt::QInt(const QInt& num)
 {
 	this->bit = num.bit;
 }
 
+//Constructor khởi tạo số với hai tham số là mode và string, chuyển chuỗi từ hệ mode sang hệ 2 rồi lưu vào dãy bit của QInt
 QInt::QInt(uint16_t mode, string s)
 {
 	if (mode == 2)
@@ -36,6 +39,7 @@ QInt::QInt(uint16_t mode, string s)
 		this->bit = binary(HexToBin(s));
 }
 
+//Cộng hai số hệ 10 dưới dạng một mảng động được cấp phát mỗi chữ số là một phần tử trong mảng
 int* QInt::Addition(int* ResultArray, int* SaveNumber, int n, int bit) {
 	int reminder = 0;
 
@@ -62,6 +66,7 @@ int* QInt::Addition(int* ResultArray, int* SaveNumber, int n, int bit) {
 	return ResultArray;
 }
 
+//Chuyển từ hệ 2 sang hệ 10
 string QInt::BinToDec()
 {
 	int check = ((*this).bit.to_string()).find_first_not_of("0");
@@ -98,6 +103,7 @@ string QInt::BinToDec()
 	return number;
 }
 
+//Chuyển từ hệ 2 sang hệ 16
 string QInt::BinToHex()
 {
 	string val = (*this).bit.to_string();
@@ -132,6 +138,7 @@ string QInt::BinToHex()
 	return result;
 }
 
+//Kiểm tra một số đó có phải là số lẻ, trả về "0" nếu là số chẵn, trả về "1" nếu là số lẻ
 string QInt::CheckEven(string number) {
 	string remainder;
 	if (number[number.size() - 1] % 2 == 0) {
@@ -143,6 +150,7 @@ string QInt::CheckEven(string number) {
 	return remainder;
 }
 
+//Chia một số hệ 10 cho 2
 string QInt::DivideBy2(string dec) {
 	string ans;
 	int idx = 0;
@@ -152,7 +160,6 @@ string QInt::DivideBy2(string dec) {
 			return ans;
 	}
 	while (temp < 2)
-		
 		temp = temp * 10 + (dec[++idx] - '0');
 	while (dec.size() > idx)
 	{
@@ -165,6 +172,7 @@ string QInt::DivideBy2(string dec) {
 	return ans;
 }
 
+//Chuyển từ hệ 10 sang hệ 2
 string QInt::DecToBin(string dec)
 {
 	bool isNegative = false;
@@ -172,7 +180,6 @@ string QInt::DecToBin(string dec)
 		isNegative = true;
 		dec = dec.substr(1);
 	}
-
 
 	if (dec == "0")
 		return "0";
@@ -193,6 +200,7 @@ string QInt::DecToBin(string dec)
 	return result;
 }
 
+//Chuyển từ hệ 16 sang hệ 2
 string QInt::HexToBin(string hex)
 {
 	string HexData = "0123456789ABCDEF";
@@ -210,12 +218,14 @@ string QInt::HexToBin(string hex)
 }
 
 //Arithmetic
+//Dấu =
 QInt& QInt::operator=(QInt const& Qint)
 {
 	this->bit = Qint.bit;
 	return (*this);
 }
 
+//Dấu + (Phép cộng)
 QInt QInt::operator+(const QInt& Qint2)
 {
 	QInt result;
@@ -246,6 +256,7 @@ QInt QInt::operator+(const QInt& Qint2)
 	return result;
 }
 
+//Dấu - (Phép trừ)
 QInt QInt::operator-(const QInt& Qint2)
 {
 	QInt result, temp = Qint2;
@@ -255,6 +266,7 @@ QInt QInt::operator-(const QInt& Qint2)
 	return result;
 }
 
+//Dấu * (Phép nhân)
 QInt QInt::operator*(const QInt& Qint2)
 {
 	QInt result;
@@ -267,7 +279,8 @@ QInt QInt::operator*(const QInt& Qint2)
 	return result;
 }
 
-QInt QInt::operator/(const QInt& Qint2) //Non-restore division
+//Dấu / (Phép chia)
+QInt QInt::operator/(const QInt& Qint2)
 {
 	int flag = 0;
 	QInt Quotent = (*this);
@@ -320,6 +333,7 @@ QInt QInt::operator/(const QInt& Qint2) //Non-restore division
 }
 
 //Bitwise
+//Dấu & (Phép AND)
 QInt QInt::operator&(const QInt& Qint2)
 {
 	QInt result;
@@ -332,6 +346,7 @@ QInt QInt::operator&(const QInt& Qint2)
 	return result;
 }
 
+//Dấu | (Phép OR)
 QInt QInt::operator|(const QInt& Qint2)
 {
 	QInt result;
@@ -344,6 +359,7 @@ QInt QInt::operator|(const QInt& Qint2)
 	return result;
 }
 
+//Dấu ^ (Phép XOR)
 QInt QInt::operator^(const QInt& Qint2)
 {
 	QInt result;
@@ -356,6 +372,7 @@ QInt QInt::operator^(const QInt& Qint2)
 	return result;
 }
 
+//Dấu ~ (Phép NOT)
 QInt QInt::operator~()
 {
 	QInt result = *this;
@@ -368,6 +385,7 @@ QInt QInt::operator~()
 	return result;
 }
 
+//Dấu >> (Phép dịch phải với n = step bước)
 QInt QInt::operator>>(int step)
 {
 	QInt result = *this;
@@ -391,6 +409,7 @@ QInt QInt::operator>>(int step)
 	return result;
 }
 
+//Dấu << (Phép dịch trái với n = step bước)
 QInt QInt::operator<<(int step)
 {
 	QInt result = *this;
@@ -406,6 +425,7 @@ QInt QInt::operator<<(int step)
 	return result;
 }
 
+//Phép xoay trái 1 bit
 QInt QInt::rol()
 {
 	QInt result = *this;
@@ -415,6 +435,7 @@ QInt QInt::rol()
 	return result;
 }
 
+//Phép xoay phải 1 bit
 QInt QInt::ror()
 {
 	QInt result = *this;
@@ -424,6 +445,7 @@ QInt QInt::ror()
 	return result;
 }
 
+//In ra dãy bit nhị phân của số QInt
 void QInt::printbit()
 {
 	for (int i = (*this).bit.size() - 1; i >= 0; i--) {
@@ -431,6 +453,7 @@ void QInt::printbit()
 	}
 }
 
+//Chuyển đổi dãy bit trong QInt về hệ mode, trả về chuỗi sau khi chuyển đổi
 string QInt::printAsMode(uint16_t mode)
 {
 	string result;
@@ -446,6 +469,7 @@ string QInt::printAsMode(uint16_t mode)
 	return result;
 }
 
+//Xóa các kí tự 0 dư ở đầu chuỗi
 string normalize(string s) {
 	int i = s.find_first_not_of("0");
 	if (i == -1)

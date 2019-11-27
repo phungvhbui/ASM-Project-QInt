@@ -1,10 +1,16 @@
-#include "FileHandle.h"
+﻿#include "FileHandle.h"
 
+//Hàm đọc file -> Tính toán -> Viết ra file theo từng dòng
 bool Calculator(string input, string output)
 {
 	ifstream fin;
+	ofstream fout;
+
 	fin.open(input);
 	if (!fin.is_open())
+		return false;
+	fout.open(output);
+	if (!fout.is_open())
 		return false;
 	
 	vector<string> Operands;
@@ -15,16 +21,16 @@ bool Calculator(string input, string output)
 		i++;
 		Operands.clear();
 
-		//Get elements from a line in file
+		//Lấy các toán hạng của phép toán ở từng dòng từ file
 		while (fin.peek() != '\n') {
 			fin >> temp;
 			Operands.push_back(temp);
 		}
 
-		//Determined and solve
+		//Xác định đó là phép tính gì và tính toán, đồng thời ghi kết quả ra file
 		uint16_t mode = stoi(Operands[0]);
 		if (mode != 2 && mode != 10 && mode != 16) {
-			WriteFile(output, "");
+			fout << "" << endl;
 			fin.ignore();
 			continue;
 		}
@@ -33,7 +39,7 @@ bool Calculator(string input, string output)
 			QInt val = QInt(mode, Operands[2]);
 			if (Operands[1] == "2" || Operands[1] == "10" || Operands[1] == "16") {
 				uint16_t convert_mode = stoi(Operands[1]);
-				WriteFile(output, val.printAsMode(convert_mode));
+				fout << val.printAsMode(convert_mode) << endl;
 				fin.ignore();
 				continue;
 			}
@@ -48,11 +54,11 @@ bool Calculator(string input, string output)
 			}
 			else
 			{
-				WriteFile(output, "");
+				fout << "" << endl;
 				fin.ignore();
 				continue;
 			}
-			WriteFile(output, val.printAsMode(mode));
+			fout << val.printAsMode(mode) <<endl;
 		}
 
 		else if (Operands.size() == 4) {
@@ -70,7 +76,7 @@ bool Calculator(string input, string output)
 				else if (Operands[2] == "/")
 				{
 					if ((val2.printAsMode(2) == "0")) {
-						WriteFile(output, "");
+						fout << "" <<endl;
 						fin.ignore();
 						continue;
 					}
@@ -84,11 +90,11 @@ bool Calculator(string input, string output)
 					result = val1 ^ val2;		
 				else
 				{
-					WriteFile(output, "");
+					fout << "" << endl;
 					fin.ignore();
 					continue;
 				}
-				WriteFile(output, result.printAsMode(mode));
+				fout << result.printAsMode(mode) << endl;
 			}
 			else {
 				QInt val = QInt(mode, Operands[1]);
@@ -99,23 +105,15 @@ bool Calculator(string input, string output)
 					val = val >> step;
 				else
 				{
-					WriteFile(output, "");
+					fout << "" << endl;
 					continue;
 				}
-				WriteFile(output, val.printAsMode(mode));
+				fout << val.printAsMode(mode) << endl;
 			}
 		}
 		fin.ignore();
 	}
-	return true;
-}
-
-void WriteFile(string output, string result)
-{
-	ofstream fout;
-	fout.open(output, ios::app);
-	if (!fout.is_open())
-		return;
-	fout << result << endl;
+	fin.close();
 	fout.close();
+	return true;
 }
