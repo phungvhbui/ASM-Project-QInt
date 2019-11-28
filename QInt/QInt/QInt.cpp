@@ -268,12 +268,13 @@ QInt QInt::operator-(const QInt& Qint2)
 //Dấu * (Phép nhân)
 QInt QInt::operator*(const QInt& Qint2)
 {
+	QInt Qint1 = *this;
 	QInt result;
 	for (int i = 0; i < Qint2.bit.size(); i++) {
 		if (Qint2.bit[i] == 1) {
-			result = result + *this;
+			result = result + Qint1;
 		}
-		this->bit = this->bit << 1;
+		Qint1 = Qint1 << 1;
 	}
 	return result;
 }
