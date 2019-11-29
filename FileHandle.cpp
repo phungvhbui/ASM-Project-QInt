@@ -20,7 +20,7 @@ bool Calculator(string input, string output)
 		Operands.clear();
 
 		//Lấy các toán hạng của phép toán ở từng dòng từ file
-		while (fin.peek() != '\n') {
+		while (fin.peek() != '\n' && fin.peek() != EOF) {
 			fin >> temp;
 			Operands.push_back(temp);
 		}
